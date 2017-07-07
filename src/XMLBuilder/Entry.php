@@ -8,7 +8,7 @@ use SimpleXMLElement;
  * Interface EntryInterface
  * @package Soyaf518\XMLBuilder
  * @author  江小溅  <soyaf518@gmail.com>
- * @since  v1.0
+ * @since   v1.0
  */
 class Entry implements EntryInterface
 {
@@ -77,93 +77,129 @@ class Entry implements EntryInterface
      */
     protected $rights;
 
+    /**
+     * Arbitrary set of params (key=>value)
+     *
+     * @var array
+     */
+    protected $rawParams = [];
+
     public function id($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     public function title($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
     public function subtitle($subtitle)
     {
         $this->subtitle = $subtitle;
+
         return $this;
     }
 
     public function summary($summary)
     {
         $this->summary = $summary;
+
         return $this;
     }
 
     public function content($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
     public function category($category)
     {
         $this->categories[] = $category;
+
         return $this;
     }
 
     public function source($source)
     {
         $this->source = $source;
+
         return $this;
     }
 
     public function author($author)
     {
         $this->author = $author;
+
         return $this;
     }
 
     public function contributor($contributor)
     {
         $this->contributor = $contributor;
+
         return $this;
     }
 
     public function link($link)
     {
         $this->links[] = $link;
+
         return $this;
     }
 
     public function updated($updated)
     {
         $this->updated = $updated;
+
         return $this;
     }
 
     public function published($published)
     {
         $this->published = $published;
+
         return $this;
     }
 
     public function rights($rights)
     {
         $this->rights = $rights;
+
+        return $this;
+    }
+
+    /**
+     * Add raw param
+     *
+     * @param string $key
+     * @param string $val
+     *
+     * @return $this
+     */
+    public function raw($key, $val)
+    {
+        $this->rawParams[$key] = $val;
+
         return $this;
     }
 
     public function appendTo(FeedInterface $feed)
     {
         $feed->addEntry($this);
+
         return $this;
     }
 
     public function asXML()
     {
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><entry></entry>',LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><entry></entry>', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
 
         if ($this->title !== null) {
             $xml->addChild('title', htmlspecialchars($this->title, ENT_QUOTES, "utf-8"));
@@ -192,6 +228,10 @@ class Entry implements EntryInterface
             if (isset($link['length'])) {
                 $element->addAttribute('length', $link['length']);
             }
+        }
+
+        foreach ($this->rawParams as $key => $val) {
+            $xml->addChild($key, $val);
         }
 
         if ($this->id !== null) {
