@@ -3,11 +3,12 @@
 namespace Soyaf518\XMLBuilder;
 
 use SimpleXMLElement;
+
 /**
  * Interface EntryInterface
  * @package Soyaf518\XMLBuilder
  * @author  江小溅  <soyaf518@gmail.com>
- * @since  v1.0
+ * @since   v1.0
  */
 class Feed implements FeedInterface
 {
@@ -74,89 +75,103 @@ class Feed implements FeedInterface
     /**
      * @var string Entrys of the feed
      */
-    protected $entrys = []; 
+    protected $entrys = [];
 
     public function id($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     public function title($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
     public function subtitle($subtitle)
     {
         $this->subtitle = $subtitle;
+
         return $this;
     }
 
     public function category($category)
     {
         $this->categories[] = $category;
+
         return $this;
     }
 
     public function link($link)
     {
         $this->links[] = $link;
+
         return $this;
     }
 
     public function author($author)
     {
         $this->author = $author;
+
         return $this;
     }
 
     public function contributor($contributor)
     {
         $this->contributor = $contributor;
+
         return $this;
     }
 
     public function generator($generator)
     {
         $this->generator = $generator;
+
         return $this;
     }
 
     public function icon($icon)
     {
         $this->icon = $icon;
+
         return $this;
     }
 
     public function logo($logo)
     {
         $this->logo = $logo;
+
         return $this;
     }
 
     public function rights($rights)
     {
         $this->rights = $rights;
+
         return $this;
     }
 
     public function updated($updated)
     {
         $this->updated = $updated;
+
         return $this;
     }
 
     public function addEntry(EntryInterface $entry)
     {
         $this->entrys[] = $entry;
+
         return $this;
     }
 
     public function appendTo(AtomInterface $atom)
     {
         $atom->addFeed($this);
+
         return $this;
     }
 
@@ -165,11 +180,11 @@ class Feed implements FeedInterface
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><feed xmlns="http://www.w3.org/2005/Atom"></feed>', LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
 
         if ($this->title !== null) {
-            $xml->addChild('title', $this->title);
+            $xml->addChild('title', htmlspecialchars($this->title, ENT_QUOTES, "utf-8"));
         }
 
         if ($this->subtitle !== null) {
-            $xml->addChild('subtitle', $this->subtitle);
+            $xml->addChild('subtitle', htmlspecialchars($this->subtitle, ENT_QUOTES, "utf-8"));
         }
 
         foreach ($this->links as $link) {
@@ -186,7 +201,7 @@ class Feed implements FeedInterface
                 $element->addAttribute('hreflang', $link['hreflang']);
             }
             if (isset($link['title'])) {
-                $element->addAttribute('title', $link['title']);
+                $element->addAttribute('title', htmlspecialchars($link['label'], ENT_QUOTES, "utf-8"));
             }
             if (isset($link['length'])) {
                 $element->addAttribute('length', $link['length']);
@@ -211,7 +226,7 @@ class Feed implements FeedInterface
             }
 
             if (isset($category['label'])) {
-                $element->addAttribute('label', $category['label']);
+                $element->addAttribute('label', htmlspecialchars($category['label'], ENT_QUOTES, "utf-8"));
             }
         }
 
@@ -220,7 +235,7 @@ class Feed implements FeedInterface
             if (!isset($this->author['name'])) {
                 throw new \Exception("The name attribute of category is required.");
             } else {
-                $element->addChild('name', $this->author['name']);
+                $element->addChild('name', htmlspecialchars($this->author['name'], ENT_QUOTES, "utf-8"));
             }
             if (isset($this->author['email'])) {
                 $element->addChild('email', $this->author['email']);
@@ -235,7 +250,7 @@ class Feed implements FeedInterface
             if (!isset($this->contributor['name'])) {
                 throw new \Exception("The name attribute of category is required.");
             } else {
-                $element->addChild('name', $this->contributor['name']);
+                $element->addChild('name', htmlspecialchars($this->contributor['name'], ENT_QUOTES, "utf-8"));
             }
             if (isset($this->contributor['email'])) {
                 $element->addChild('email', $this->contributor['email']);
@@ -246,8 +261,8 @@ class Feed implements FeedInterface
         }
 
         if (!empty($this->generator)) {
-            $element = $xml->addChild('generator', $this->generator['name']);
-            
+            $element = $xml->addChild('generator', htmlspecialchars($this->generator['name'], ENT_QUOTES, "utf-8"));
+
             if (isset($this->generator['uri'])) {
                 $element->addAttribute('uri', $this->generator['uri']);
             }
@@ -269,7 +284,7 @@ class Feed implements FeedInterface
         }
 
         if ($this->rights !== null) {
-            $xml->addChild('rights', $this->rights);
+            $xml->addChild('rights', htmlspecialchars($this->rights, ENT_QUOTES, "utf-8"));
         }
 
         foreach ($this->entrys as $entry) {
