@@ -166,11 +166,11 @@ class Entry implements EntryInterface
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><entry></entry>',LIBXML_NOERROR | LIBXML_ERR_NONE | LIBXML_ERR_FATAL);
 
         if ($this->title !== null) {
-            $xml->addChild('title', $this->title);
+            $xml->addChild('title', htmlspecialchars($this->title, ENT_QUOTES, "utf-8"));
         }
 
         if ($this->subtitle) {
-            $xml->addChild('subtitle', $this->subtitle);
+            $xml->addChild('subtitle', htmlspecialchars($this->subtitle, ENT_QUOTES, "utf-8"));
         }
 
         foreach ($this->links as $link) {
@@ -199,7 +199,7 @@ class Entry implements EntryInterface
         }
 
         if ($this->summary !== null) {
-            $xml->addChild('summary', $this->summary);
+            $xml->addChild('summary', htmlspecialchars($this->summary, ENT_QUOTES, "utf-8"));
         }
 
         if ($this->content !== null) {
@@ -222,7 +222,7 @@ class Entry implements EntryInterface
             if (!isset($this->author['name'])) {
                 throw new \Exception("The name attribute of category is required.");
             } else {
-                $element->addChild('name', $this->author['name']);
+                $element->addChild('name', htmlspecialchars($this->author['name'], ENT_QUOTES, "utf-8"));
             }
             if (isset($this->author['email'])) {
                 $element->addChild('email', $this->author['email']);
@@ -237,7 +237,7 @@ class Entry implements EntryInterface
             if (!isset($this->contributor['name'])) {
                 throw new \Exception("The name attribute of category is required.");
             } else {
-                $element->addChild('name', $this->contributor['name']);
+                $element->addChild('name', htmlspecialchars($this->contributor['name'], ENT_QUOTES, "utf-8"));
             }
             if (isset($this->contributor['email'])) {
                 $element->addChild('email', $this->contributor['email']);
@@ -261,7 +261,7 @@ class Entry implements EntryInterface
             }
 
             if (isset($category['label'])) {
-                $element->addAttribute('label', $category['label']);
+                $element->addAttribute('label', htmlspecialchars($category['label'], ENT_QUOTES, "utf-8"));
             }
         }
 
