@@ -1,5 +1,5 @@
 {
-  "name": "ancoka/atom-feed",
+  "name": "professionalweb/atom-feed",
   "version": "1.1.0",
   "description": "A simple atom feed builder for PHP",
   "keywords": [
