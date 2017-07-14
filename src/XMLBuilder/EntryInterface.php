@@ -147,8 +147,9 @@ interface EntryInterface
      *
      * @param string $key
      * @param string $val
+     * @param string $namespace
      *
      * @return $this
      */
-    public function raw($key, $val);
+    public function raw($key, $val, $namespace = null);
 }
