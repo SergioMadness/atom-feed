@@ -180,12 +180,13 @@ class Entry implements EntryInterface
      *
      * @param string $key
      * @param string $val
+     * @param string $namespace
      *
      * @return $this
      */
-    public function raw($key, $val)
+    public function raw($key, $val, $namespace = null)
     {
-        $this->rawParams[$key] = $val;
+        $this->rawParams[$key] = [$val, $namespace];
 
         return $this;
     }
@@ -231,7 +232,7 @@ class Entry implements EntryInterface
         }
 
         foreach ($this->rawParams as $key => $val) {
-            $xml->addChild($key, $val);
+            $xml->addChild($key, htmlspecialchars($val[0], ENT_QUOTES, "utf-8"), $val[1]);
         }
 
         if ($this->id !== null) {
